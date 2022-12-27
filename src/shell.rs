@@ -392,23 +392,3 @@ pub fn write_array(arr: [u8; 10]){
         print!("{}", byte as char);
     }
 }
-/*
-
-cur_dir
-make_dir
-change_dir
-remove_dir
-dir_tree
-clear
-
-*/
-
-// pub fn parse_str(s: &str) -> [u8; MAX_DIR_NAME]{
-//     let mut output = [u8; MAX_DIR_NAME];
-//
-//     for i in 0..MAX_DIR_NAME {
-//
-//     }
-//
-//     return output;
-// }

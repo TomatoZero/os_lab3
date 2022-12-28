@@ -88,7 +88,7 @@ impl Shell {
 
                 self.buf = [0; 80];
                 self.buf_len = 0;
-                println!()
+                // println!()
             }
             _ => {
                 self.buf[self.buf_len] = key;
@@ -103,24 +103,30 @@ impl Shell {
 
         if compare_strings("cur_dir", command) {
             self.current_dir_command();
+            println!();
         }
         else if compare_strings("make_dir", command) {
             self.make_dir_command(argument);
+            println!();
         }
         else if compare_strings("change_dir", command) {
             self.change_dir_command(argument);
+            println!();
         }
         else if compare_strings("remove_dir", command){
             self.remove_dir_command(argument);
+            println!();
         }
         else if compare_strings("dir_tree", command) {
             self.dir_tree_command();
+            println!();
         }
         else if compare_strings("clear", command) {
             SCREEN.lock().clear();
         }
         else {
             Self::not_supported_command(command);
+            println!();
         }
 
     }
@@ -211,7 +217,6 @@ impl Shell {
 
     fn remove_dir_command(&mut self, dir_name: [u8; 10]){
         if dir_name[0] == b' '{
-            println!();
             print!("[error] The folder name is missing");
             return;
         }
@@ -219,7 +224,7 @@ impl Shell {
         let dir_id = self.find_childer_dir(self.current_dir.name, dir_name);
 
         if dir_id == 0{
-            println!();
+            // println!();
             print!("[error] No such children directory!");
         }
         else {
@@ -236,9 +241,17 @@ impl Shell {
 
             self.dirs.dirs[self.current_dir.index] = self.current_dir;
 
+            for child_indexes in self.dirs.dirs[dir_id].child_indexes {
+                if child_indexes == 0 {
+                    break;
+                }
+
+                self.remove_dir_by_index(child_indexes);
+            }
+
             self.remove_dir_by_index(dir_id);
 
-            println!();
+            // println!();
             print!("[ok] Directory ");
             write_array(dir_name);
             print!("was removed")
@@ -335,6 +348,7 @@ pub fn parse_input(buf: [u8; 80], buf_len: usize) -> ([u8; 10],[u8; 10]){
         if i >= 10 {
             println!();
             print!("[error] Command is to long");
+            println!();
             return ([b' '; 10], [b' '; 10]);
         }
 
@@ -349,6 +363,7 @@ pub fn parse_input(buf: [u8; 80], buf_len: usize) -> ([u8; 10],[u8; 10]){
         if j >= 10 {
             println!();
             print!("[error] Directory name is too long");
+            println!();
             return ([b' '; 10], [b' '; 10]);
         }
         argument[j] = buf[i];
